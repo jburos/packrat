@@ -37,8 +37,11 @@ findLocalRepoForPkg <- function(pkg,
                                 repos = get_opts("local.repos"),
                                 fatal = TRUE) {
   if (!length(repos)) return(character())
+
   # Search through the local repositories for a suitable package
   hasPackage <- unlist(lapply(repos, function(repo) {
+    if (!grepl(x = repo,pattern='file:*'))
+      repo <- file.path('file:',repo)
     if (any(match(utils::available.packages(contriburl = utils::contrib.url(repo)),pkg)))
       1
     else
