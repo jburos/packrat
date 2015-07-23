@@ -25,13 +25,24 @@ install_local <- function(pkgs,
   }
 }
 
+##' Check whether a package exists in a Local Repository
+##'
+##' @import utils
+##'
+##' @param pkg A single package name
+##' @param repos The local repositories to search for the package names specified.
+##' @param fatal whether to stop if not found
+##'
 findLocalRepoForPkg <- function(pkg,
                                 repos = get_opts("local.repos"),
                                 fatal = TRUE) {
   if (!length(repos)) return(character())
   # Search through the local repositories for a suitable package
   hasPackage <- unlist(lapply(repos, function(repo) {
-    file.exists(file.path(repo, pkg))
+    if (any(match(utils::available.packages(contriburl = utils::contrib.url(repo)),pkg)))
+      1
+    else
+      0
   }))
   names(hasPackage) <- repos
   numFound <- sum(hasPackage)
