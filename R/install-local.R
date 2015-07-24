@@ -55,7 +55,7 @@ findLocalRepoForPkg <- function(pkg,
 
   # Search through the local repositories for a suitable package
   hasPackage <- unlist(lapply(repos, function(repo) {
-    if (length(getPkgInfoLocalRepo(pkg,repo))>0)
+    if (file.exists(file.path(repo,pkg)) || length(getPkgInfoLocalRepo(pkg,repo))>0)
       1
     else
       0
